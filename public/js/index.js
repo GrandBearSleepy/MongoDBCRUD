@@ -18,7 +18,9 @@ $.get('/student', function (data) {
 })
 
 $('#tbody').delegate('.delbtn', 'click', function () {
-    // alert('Warning!!')
+    if (!confirm('Are your sure delete this student?')) {
+        return;
+    }
     let $id = $(this).attr('data-id');
     fetch('/api/student/' + $id, {
         method: 'DELETE',
@@ -36,11 +38,12 @@ $('#tbody').delegate('.delbtn', 'click', function () {
             if (data.errors) {
                 error;
             } else {
+                // window.location.reload();
                 alert('Delete success!!');
             }
 
         });
-    window.location.reload();
+
 
 });
 

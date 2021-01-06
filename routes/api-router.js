@@ -1,17 +1,29 @@
 const db = require("../models");
 
 module.exports = function (app) {
-    app.post('/api/student', function (req, res) {
+    app.post('/api/student', function ({ body }, res) {
         console.log('request recieved')
-        console.log(req.body);
-        db.Student.create(req.body)
-            .then(dbStudent => {
-                res.json(dbStudent);
-            })
-            .catch(err => {
-                res.status(404).json(err);
-            });
+        console.log(body);
+        db.Student.addStudent(body, function (result) {
+            res.json({ result: result });
+            console.log(result)
+        })
+        // db.Student.create(body)
+        //     .then(dbStudent => {
+        //         res.json({ result: 1 });
+        //     })
+        //     .catch(err => {
+        //         res.status(404).json(err);
+        //     });
     });
+
+    app.propfind('/:id', function (req, res) {
+        const sid = req.params.id;
+        db.Student.checkId(sid, function (result) {
+            res.json({ result: result });
+        })
+        console.log('propfind request has received')
+    })
 
     app.get('/student', function (req, res) {
         db.Student.find({})
@@ -54,6 +66,7 @@ module.exports = function (app) {
         db.Student.deleteOne({ id: req.params.id })
             .then(data => {
                 res.json(data);
+                console.log(data);
             })
     })
 }

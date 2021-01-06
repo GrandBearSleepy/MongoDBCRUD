@@ -7,11 +7,13 @@ const studentSchema = new mongoose.Schema({
     age: Number
 });
 
-studentSchema.static.addStudent = function (json, cb) {
+studentSchema.statics.addStudent = function (json, cb) {
     Student.checkId(json.id, function (isExist) {
         if (isExist) {
             let s = new Student(json);
-            s.save();
+            s.save(function (err) {
+                cb(-2);
+            });
             cb(1);
         }
         else {
@@ -20,7 +22,7 @@ studentSchema.static.addStudent = function (json, cb) {
     })
 }
 
-studentSchema.static.checkId = function (id, cb) {
+studentSchema.statics.checkId = function (id, cb) {
     this.find({ id: id }, function (err, results) {
         cb(results.length == 0);
     })
