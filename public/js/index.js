@@ -38,12 +38,11 @@ $('#tbody').delegate('.delbtn', 'click', function () {
             if (data.errors) {
                 error;
             } else {
-                // window.location.reload();
                 alert('Delete success!!');
             }
 
         });
-
+    window.location.reload();
 
 });
 
